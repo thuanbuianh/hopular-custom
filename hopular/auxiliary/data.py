@@ -1327,20 +1327,20 @@ class Monks2Dataset(FixedDataset):
         )
 
 
-class chatgptDataset(CVDataset):
+class ShrutimeDataset(CVDataset):
     """
-    Implementation of the medium-sized dataset <chatgpt>.
+    Implementation of the medium-sized dataset <Shrutime>.
     """
 
     def __init__(self,
                  split_index: int = 0):
         """
-        Initialize medium-sized dataset <chatgpt>.
+        Initialize medium-sized dataset <Shrutime>.
 
         :param split_index: index of the split to be used
         """
-        super(chatgptDataset, self).__init__(
-            dataset_name=r'chatgpt',
+        super(ShrutimeDataset, self).__init__(
+            dataset_name=r'shrutime',
             feature_numeric=[3, 6, 7, 8, 12],
             feature_discrete=[4, 5, 9, 10, 11, 13],
             target_numeric=None,
