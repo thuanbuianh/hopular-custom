@@ -328,7 +328,7 @@ class DataModule(LightningDataModule):
         return DataLoader(
             dataset=self.__data_train,
             batch_size=len(self.__data_train) if self.__batch_size is None else self.__batch_size,
-            pin_memory=self.trainer.gpus is not None,
+            pin_memory=self.trainer.accelerator is not None,
             num_workers=self.__num_workers,
             persistent_workers=self.__num_workers > 0,
             collate_fn=partial(
@@ -355,7 +355,7 @@ class DataModule(LightningDataModule):
         return DataLoader(
             dataset=self.__data_validation,
             batch_size=len(self.__data_validation),
-            pin_memory=self.trainer.gpus is not None,
+            pin_memory=self.trainer.accelerator is not None,
             num_workers=self.__num_workers,
             persistent_workers=self.__num_workers > 0,
             collate_fn=partial(
@@ -382,7 +382,7 @@ class DataModule(LightningDataModule):
         return DataLoader(
             dataset=self.__data_test,
             batch_size=len(self.__data_test),
-            pin_memory=self.trainer.gpus is not None,
+            pin_memory=self.trainer.accelerator is not None,
             num_workers=self.__num_workers,
             persistent_workers=self.__num_workers > 0,
             collate_fn=partial(
