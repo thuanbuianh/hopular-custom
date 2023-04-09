@@ -816,7 +816,7 @@ class ChatGPTDataset(CVDataset):
             missing_entries=None,
             skip_rows=1,
             split_index=split_index,
-            num_splits=1,
+            num_splits=2,
             split_state=1,
             validation_size=0.2,
             checkpoint_mode=BaseDataset.CheckpointMode.MAX
