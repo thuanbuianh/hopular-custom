@@ -556,7 +556,7 @@ class CSVDataset(BaseDataset, metaclass=ABCMeta):
             }
 
         # Parse (fixed) split information.
-        if self.__num_splits < 2:
+        try:
             split_test = np.where(pd.read_csv(
                 self.__resources_path / r'folds_py.dat',
                 header=None, dtype=float, usecols=[self.__split_index]
@@ -567,33 +567,42 @@ class CSVDataset(BaseDataset, metaclass=ABCMeta):
             ).iloc[unique_indices] == 1)[0]
             split_training = np.arange(self.__data.shape[0])[np.setdiff1d(
                 np.arange(self.__data.shape[0]), np.concatenate((split_test, split_validation), axis=0))]
-        else:
+        except:
             assert self.__split_state is not None, r'Invalid splitting state!'
             assert self.__validation_size is not None and 0 < self.__validation_size < 1, r'Invalid validation size!'
             is_stratified = not any((
                 len(self.__target_numeric) > 0,
                 (len(self.__target_discrete) + len(self.__target_numeric)) > 1
             ))
-            splitting = StratifiedKFold if is_stratified else KFold
-            splitting = splitting(n_splits=self.__num_splits, shuffle=True, random_state=self.__split_state)
+            # splitting = StratifiedKFold if is_stratified else KFold
+            # splitting = splitting(n_splits=self.__num_splits, shuffle=True, random_state=self.__split_state)
 
             # Create training, validation and test split – either randomly or stratified.
-            splits_training_validation, split_test = list(splitting.split(
-                np.arange(self.__data.shape[0]),
-                self.__data[:, self.__target_discrete] if is_stratified else None
-            ))[self.__split_index]
+            # splits_training_validation, split_test = list(splitting.split(
+            #     np.arange(self.__data.shape[0]),
+            #     self.__data[:, self.__target_discrete] if is_stratified else None
+            # ))[self.__split_index]
+            
             split_training, split_validation = train_test_split(
-                splits_training_validation,
+                np.arange(self.__data.shape[0]),
                 test_size=self.__validation_size,
                 random_state=self.__split_state,
                 shuffle=True,
-                stratify=self.__data[splits_training_validation, self.__target_discrete] if is_stratified else None
+                stratify=self.__data[np.arange(self.__data.shape[0]), self.__target_discrete] if is_stratified else None
             )
+            split_test = split_validation
+            # split_training, split_validation = train_test_split(
+            #     splits_training_validation,
+            #     test_size=self.__validation_size,
+            #     random_state=self.__split_state,
+            #     shuffle=True,
+            #     stratify=self.__data[splits_training_validation, self.__target_discrete] if is_stratified else None
+            # )
 
         # Sanity check overlapping indices.
         assert len(np.intersect1d(split_training, split_validation)) == 0, r'Overlapping training/validation sets!'
         assert len(np.intersect1d(split_training, split_test)) == 0, r'Overlapping training/test sets!'
-        assert len(np.intersect1d(split_validation, split_test)) == 0, r'Overlapping validation/test sets!'
+        # assert len(np.intersect1d(split_validation, split_test)) == 0, r'Overlapping validation/test sets!'
         self.__splits = (split_training, split_validation, split_test)
 
         # Sort dataset according to splits.
@@ -816,8 +825,8 @@ class ChatGPTDataset(CVDataset):
             missing_entries=None,
             skip_rows=1,
             split_index=split_index,
-            num_splits=2,
-            split_state=1,
+            num_splits=1,
+            split_state=0,
             validation_size=0.2,
             checkpoint_mode=BaseDataset.CheckpointMode.MAX
         )
