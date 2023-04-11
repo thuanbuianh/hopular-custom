@@ -819,7 +819,34 @@ class ChatGPTDataset(CVDataset):
         super(ChatGPTDataset, self).__init__(
             dataset_name=r'chatgpt',
             feature_numeric=[1, 3, 4, 6, 7, 8, 9, 10, 11, 12],
-            feature_discrete=[0, 2],
+            feature_discrete=[2],
+            target_numeric=None,
+            target_discrete=[2],
+            missing_entries=None,
+            skip_rows=1,
+            split_index=split_index,
+            num_splits=1,
+            split_state=1,
+            validation_size=0.2,
+            checkpoint_mode=BaseDataset.CheckpointMode.MAX
+        )
+
+class ChatGPTSpecificDataset(CVDataset):
+    """
+    Implementation of the small-sized dataset <chatgpt>.
+    """
+
+    def __init__(self,
+                 split_index: int = 0):
+        """
+        Initialize medium-sized dataset <chatgpt>.
+
+        :param split_index: index of the split to be used
+        """ # Problem,Difficulty,Status,Pass,Total,Description,ARI,DCR,FRE,SenCount,LexCount,textStd,Test_diff
+        super(ChatGPTSpecificDataset, self).__init__(
+            dataset_name=r'chatgpt',
+            feature_numeric=[1, 3, 4, 7, 8, 10, 12],
+            feature_discrete=[2],
             target_numeric=None,
             target_discrete=[2],
             missing_entries=None,
