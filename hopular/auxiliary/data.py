@@ -845,7 +845,7 @@ class ChatGPTSpecificDataset(CVDataset):
         """ # Problem,Difficulty,Status,Pass,Total,Description,ARI,DCR,FRE,SenCount,LexCount,textStd,Test_diff
         super(ChatGPTSpecificDataset, self).__init__(
             dataset_name=r'chatgpt',
-            feature_numeric=[1, 3, 4, 7, 8, 10, 12],
+            feature_numeric=[1, 4, 6, 7, 8, 9, 10, 11],
             feature_discrete=[2],
             target_numeric=None,
             target_discrete=[2],
